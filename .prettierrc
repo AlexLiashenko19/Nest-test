@@ -1,4 +1,9 @@
 {
   "singleQuote": true,
-  "trailingComma": "all"
+  "trailingComma": "all",
+  "sortingMethod": "lineLength",
+  "plugins": ["prettier-plugin-sort-imports"],
+  "importOrder": ["^(controller|service)/(.*)$", "^[./]"],
+  "importOrderSeparation": true,
+  "importOrderSortSpecifiers": true
 }
