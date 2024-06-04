@@ -1,2 +1,2 @@
-export * from './create-bookmark.dto';
-export * from './edit-bookmark.dto';
+export * from './Create-bookmark.dto';
+export * from './Edit-bookmark.dto';

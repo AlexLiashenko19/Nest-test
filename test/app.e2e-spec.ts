@@ -1,6 +1,6 @@
+import { CreateBookmarkDto, EditBookmarkDto } from 'src/bookmark/dto';
 import { INestApplication, ValidationPipe } from '@nestjs/common';
 import { PrismaService } from '../src/prisma/prisma.service';
-import { createBookmarkDto } from 'src/bookmark/dto';
 import { AuthDto } from '../src/auth/dto/auth.dto';
 import { AppModule } from '../src/app.module';
 import { EditUserDto } from 'src/user/dto';
@@ -108,7 +108,7 @@ describe('App e2e', () => {
       });
     });
     describe('Creaate bookmark', () => {
-      const dto: createBookmarkDto = {
+      const dto: CreateBookmarkDto = {
         title: 'First bookmark',
         link: 'https://www.youtube.com/watch?v=GHTA143_b-s&t=8572s&ab_channel=freeCodeCamp.org',
       };
@@ -128,13 +128,45 @@ describe('App e2e', () => {
         return pactum
           .spec()
           .get('/bookmarks/{id}')
-          .withPathParams('id', '$S{bookmarkId}')
+          .withPathParams('id', '${bookmarkId}')
           .withHeaders({
             Authorization: 'Bearer ${userAt}',
           });
       });
     });
-    describe('Edit bookmark by id', () => {});
-    describe('Delete bookmark by id', () => {});
+    describe('Edit bookmark by id', () => {
+      const dto: EditBookmarkDto = {
+        title: 'NestJs Course for Beginners - Create a REST API',
+        description:
+          'Learn NestJs by building a CRUD REST API with end-to-end tests using modern web development techniques. NestJs is a rapidly growing node js framework that helps build scalable and maintainable backend applications.',
+      };
+      it('should edit bookmarks by id', () => {
+        return pactum
+          .spec()
+          .patch('/bookmarks/{id}')
+          .withPathParams('id', '${bookmarkId}')
+          .withHeaders({
+            Authorization: 'Bearer ${userAt}',
+          })
+          .withBody(dto);
+      });
+    });
+    describe('Delete bookmark by id', () => {
+      it('should delete bookmarks by id', () => {
+        return pactum
+          .spec()
+          .delete('/bookmarks/{id}')
+          .withPathParams('id', '${bookmarkId}')
+          .withHeaders({
+            Authorization: 'Bearer ${userAt}',
+          });
+      });
+
+      it('should get empty bookmark', () => {
+        return pactum.spec().get('/bookmarks').withHeaders({
+          Authorization: 'Bearer ${userAt}',
+        });
+      });
+    });
   });
 });
